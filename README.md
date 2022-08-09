@@ -113,7 +113,7 @@ components:
 ### The OpenApi _Delegate Pattern_  
 ![spring-numbers-03.png](spring-numbers-03.png?id=v1)  
 
-### The Client Configuration  
+### Configuring the NumbersApiClient  
 ![spring-numbers-04.png](spring-numbers-04.png?id=v1)  
 
 ConnectionPool - pool overloading
