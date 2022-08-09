@@ -1,6 +1,6 @@
 # Numbers
 Java, Spring, Reactive (Spring Webflux), Java Concurrency (ExecutorService),
-Simultaneous Spring WebClient Calls.  
+Simultaneous Spring WebClient Calls, OAS3 + OpenApiGenerator.  
   
 This demo application demonstrates multiple calls to the server. Observing the
 WebClient internal capabilites for simulateneous calls. How to build and
