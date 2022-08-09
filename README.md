@@ -10,6 +10,12 @@ configure the client. OpenApi _Delegate Pattern_ explained.
  * The client provides an integer number and receives the English word, describing this number.
  * The client requests a list of integers and receives a list of English words. 
 
+#### Basic calls
+_Client_  
+`http://localhost:8081/get/1`  
+_Server_  
+`http://localhost:8080/api/v1/numbers/1`  
+
 #### Single call
 ![spring-numbers-01.png](spring-numbers-01.png?id=v1)  
 
