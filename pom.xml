@@ -1,0 +1,41 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+		xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.7.2</version>
+		<relativePath/>
+	</parent>
+	<groupId>com.viki3d.spring.numbers</groupId>
+	<artifactId>spring-numbers</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
+	
+	
+    <modules>
+    	<module>spring-numbers-client</module>
+    	<module>spring-numbers-server</module>
+    </modules>
+    
+    
+    <dependencyManagement>
+    	<dependencies>
+    	
+			<dependency>
+				<groupId>com.google.code.findbugs</groupId>
+				<artifactId>jsr305</artifactId>
+				<version>3.0.2</version>
+			</dependency>
+			
+			<dependency>
+				<groupId>org.openapitools</groupId>
+				<artifactId>jackson-databind-nullable</artifactId>
+				 <version>0.2.2</version>
+			</dependency>
+    	
+    	</dependencies>
+    </dependencyManagement>
+    
+</project>

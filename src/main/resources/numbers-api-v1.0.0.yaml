@@ -1,0 +1,45 @@
+openapi: 3.0.0
+info:
+  title: Numbers API
+  version: "1.0.0"
+  description: Simple Numbers API
+  contact:
+    email: numbers_api@viki3d.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+servers:
+  - url: https://viki3d.com/
+tags:
+  - name: Numbers
+#    description: API endpoints
+paths:
+  /api/v1/numbers/{id}:
+    get:
+      tags:
+        - numbers
+      summary: Returns the word, describing a given number.
+      operationId: getNumberName
+      description: Gets the English text word for an integer number.
+      parameters:
+        - in: "path"
+          name: "id"
+          description: The integer number itself
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NumberWord'
+        '400':
+          description: bad input parameter
+components:
+  schemas:
+    NumberWord:
+      properties:    
+        word:
+          type: string

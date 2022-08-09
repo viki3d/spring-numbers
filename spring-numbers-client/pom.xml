@@ -1,0 +1,113 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+		xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.viki3d.spring.numbers</groupId>
+		<artifactId>spring-numbers</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	<artifactId>spring-numbers-client</artifactId>
+	
+    <properties>
+        <java.version>11</java.version>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<api-filename>numbers-api-v1.0.0.yaml</api-filename>
+		<base-package>${project.groupId}</base-package>
+    </properties>
+
+
+    <dependencies>
+    
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
+        </dependency>
+    
+		<dependency>
+		    <groupId>org.springframework</groupId>
+		    <artifactId>spring-core</artifactId>
+		</dependency>
+    
+		<dependency>
+			<groupId>io.swagger</groupId>
+			<artifactId>swagger-annotations</artifactId>
+			<version>1.6.5</version>
+		</dependency>
+		
+		<!-- Fixes: missing @javax.annotation.Nullable in the generated code -->
+		<dependency>
+			<groupId>com.google.code.findbugs</groupId>
+			<artifactId>jsr305</artifactId>
+			<!-- Managed version: parent POM -->
+		</dependency>
+		
+		<!-- Fixes: missing import org.openapitools.jackson.nullable.JsonNullableModule; 
+			 in the generated code  
+		-->
+		<dependency>
+			<groupId>org.openapitools</groupId>
+			<artifactId>jackson-databind-nullable</artifactId>
+			<!-- Managed version: parent POM -->
+		</dependency>
+		
+		<dependency>
+		    <groupId>ch.qos.logback</groupId>
+		    <artifactId>logback-classic</artifactId>
+			<!-- Managed version: spring-boot-starter-parent/spring-boot-dependencies -->
+		</dependency>
+		
+    </dependencies>
+
+    <build>
+        <plugins>
+    	
+    		<!-- 
+    		Eclipse/STS fix: Continuous code re-generations do: [spring-numbers-client-api] -> 
+    		right-click	-> Properties -> Builders -> Maven Project Builder: Un-check
+    		-->
+			<plugin>
+				<groupId>org.openapitools</groupId>
+				<artifactId>openapi-generator-maven-plugin</artifactId>
+				<version>6.0.0</version>
+				<executions>
+					<execution>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<inputSpec>${project.basedir}/../src/main/resources/${api-filename}</inputSpec>
+							<generatorName>java</generatorName>
+							<library>webclient</library>
+							<invokerPackage>${base-package}.client</invokerPackage>
+							<apiPackage>${base-package}.client.api</apiPackage>
+							<modelPackage>${base-package}.client.model</modelPackage>
+							<enablePostProcessFile>false</enablePostProcessFile>
+							<configOptions>
+								<useTags>false</useTags>
+								<dateLibrary>java8</dateLibrary>
+							</configOptions>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			
+    	</plugins>
+    </build>
+	
+	
+</project>

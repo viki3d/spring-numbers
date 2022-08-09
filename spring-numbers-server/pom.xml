@@ -1,0 +1,125 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+		xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.viki3d.spring.numbers</groupId>
+		<artifactId>spring-numbers</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	<artifactId>spring-numbers-server</artifactId>
+	
+    <properties>
+        <java.version>11</java.version>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<api-filename>numbers-api-v1.0.0.yaml</api-filename>
+		<base-package>${project.groupId}</base-package>
+    </properties>
+	
+    <dependencies>
+    
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>        
+
+        <dependency>
+            <groupId>io.projectreactor</groupId>
+            <artifactId>reactor-test</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        
+        
+		<dependency>
+		    <groupId>io.swagger.core.v3</groupId>
+		    <artifactId>swagger-core</artifactId>
+		    <version>2.1.10</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/io.swagger.core.v3/swagger-annotations -->
+		<dependency>
+		    <groupId>io.swagger.core.v3</groupId>
+		    <artifactId>swagger-annotations</artifactId>
+		    <version>2.1.10</version>
+		</dependency>
+        
+		<!-- Fixes missing: @javax.annotation.Nullable in the generated code -->
+		<dependency>
+			<groupId>com.google.code.findbugs</groupId>
+			<artifactId>jsr305</artifactId>
+			<!-- Managed version: parent POM -->
+		</dependency>
+		
+		<!-- Fixes missing: import org.openapitools.jackson.nullable.JsonNullableModule; 
+			 in the generated code  
+		-->
+		<dependency>
+			<groupId>org.openapitools</groupId>
+			<artifactId>jackson-databind-nullable</artifactId>
+			<!-- Managed version: parent POM -->
+		</dependency>
+
+    </dependencies>
+	
+	
+    <build>
+        <plugins>
+        
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+    	
+			<plugin>
+				<groupId>org.openapitools</groupId>
+				<artifactId>openapi-generator-maven-plugin</artifactId>
+				<version>6.0.0</version>
+				<executions>
+					<execution>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<inputSpec>${project.basedir}/../src/main/resources/${api-filename}</inputSpec>
+							<generatorName>spring</generatorName>
+							<!--
+							<library>spring-boot</library>
+							-->
+							<invokerPackage>${base-package}.server</invokerPackage>
+							<apiPackage>${base-package}.server.api</apiPackage>
+							<modelPackage>${base-package}.server.model</modelPackage>
+							<enablePostProcessFile>false</enablePostProcessFile>
+	       					<configOptions>
+								<useTags>true</useTags>
+								<dateLibrary>java8</dateLibrary>
+								<delegatePattern>true</delegatePattern>
+								<!-- 
+								<configPackage>${base-package}.configuraion</configPackage>
+								-->
+								<generateSupportingFiles>false</generateSupportingFiles>
+								<output>${project.build.directory}/generated-sources</output>
+					        </configOptions>							
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			
+    	</plugins>
+
+    </build>
+
+	
+</project>

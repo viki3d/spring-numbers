@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="false"
+    xmlns="http://ch.qos.logback/xml/ns/logback"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://ch.qos.logback/xml/ns/logback https://raw.githubusercontent.com/enricopulatzo/logback-XSD/master/src/main/xsd/logback.xsd">
+	
+  	<appender name="ConsoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+    	<layout class="ch.qos.logback.classic.PatternLayout">
+      		<pattern>%d{yyyy-MM-dd HH:mm:ss} %-5p %logger{36} %m%n</pattern>
+	    </layout>
+  	</appender>
+
+  	<appender name="FileAppender" class="ch.qos.logback.core.FileAppender">
+    	<file>logback.log</file>
+    	<append>false</append>
+    	<encoder>
+			<pattern>%d{yyyy-MM-dd HH:mm:ss} %-5p %m%n</pattern>
+	    </encoder>
+  	</appender>
+
+  	<logger name="com.viki3d.spring.numbers" level="DEBUG">
+  	</logger>
+
+	<root level="WARN">
+		<appender-ref ref="ConsoleAppender" />
+		<appender-ref ref="FileAppender" />
+	</root>
+
+	
+</configuration>
