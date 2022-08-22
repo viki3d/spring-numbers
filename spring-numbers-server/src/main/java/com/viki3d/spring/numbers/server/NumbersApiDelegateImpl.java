@@ -5,10 +5,21 @@ import com.viki3d.spring.numbers.server.model.NumberWord;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import javax.servlet.http.HttpSession;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Scope;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 /**
  * Receives an integer number and responds with a word, describing this integer, wrapped as 
@@ -22,9 +33,10 @@ public class NumbersApiDelegateImpl implements NumbersApiDelegate {
   private static final boolean RANDOM_PROCESSING_DELAY = true;
   private static final long MIN_PROCESSING_TIME_MS = 100;
   private static final long MAX_PROCESSING_TIME_MS = 400;
+  private static final String KEY_SESION_COUNTER = "session_counter";
 
   private static Map<String, String> map = new HashMap<>();
-
+  
   static {
     // Initialize the test data: 1..100
     map.put("1", "one");
@@ -53,9 +65,38 @@ public class NumbersApiDelegateImpl implements NumbersApiDelegate {
     }
   }
   
-  // Reuse Random object for all invocations
+  public static HttpSession getSession() {
+	    ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder
+	    		.currentRequestAttributes();
+	    return attr.getRequest().getSession(true); // true == allow create
+  }  
+  
+  // Define logger
+  private final Logger logger = LoggerFactory.getLogger(getClass());
+  
+  // Reuse this Random object for all invocations
   private Random random = new Random();
+  
+  // Use counter, shared between all controller invocations (concurrency unsafe)
+  private AtomicInteger commonCounter = new AtomicInteger();
+  
+  // Use counter specific for every controller instance
+  @Bean
+  @Scope(value = WebApplicationContext.SCOPE_REQUEST)
+  private Integer specificCounter1() {
+	  return 0;
+  }
 
+  // Use counter specific for every controller instance
+  private Integer specificCounter2() {
+	  Integer c = (Integer) getSession().getAttribute(KEY_SESION_COUNTER);
+	  if (c==null) {
+		  c = 0;
+	  }
+	  return c;
+  }
+  
+  
   @Override
   public ResponseEntity<NumberWord> getNumberName(String id) {
     // Calculate processing time delay to be simulated
@@ -83,9 +124,29 @@ public class NumbersApiDelegateImpl implements NumbersApiDelegate {
     // Set the final result body
     NumberWord numberWord = new NumberWord();
     numberWord.setWord(map.get(id) + " / processingTimeInMs=" + processingTimeInMs);
+    
+    // Test counters
+    testCounters();
 
     // Return: ResponseEntity<NumberWord>
     return new ResponseEntity<>(numberWord, responseHeaders, HttpStatus.OK);
   }
 
+  private void testCounters() {
+    int i;
+    commonCounter.addAndGet(1);
+    i = commonCounter.addAndGet(1);
+    logger.debug("Common counter = {}", i);
+
+    i = specificCounter1();
+    i++;
+    i++;
+    logger.debug("specificCounter1 = {}", i); //always == 2 (controller instance specific counter)
+
+    i = specificCounter2();
+    i++;
+    i++;
+    logger.debug("specificCounter2 = {}", i); //always == 2 (controller instance specific counter)
+  }
+  
 }
